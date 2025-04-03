@@ -31,7 +31,7 @@ function buildCharts(sample) {
 
     // Filter the samples for the object with the desired sample number
     
-    mySamples = mySamples.filter(number => number.id == sample)[0];
+    mySamples = mySamples.find(number => number.id == sample);
     // Get the otu_ids, otu_labels, and sample_values
     let otu_ids = mySamples.otu_ids ;
     let otu_labels = mySamples.otu_labels ;
@@ -90,6 +90,7 @@ function buildCharts(sample) {
 
 
     sortedIds = sortedIds.slice(0,10);
+    sortedLabels = sortedLabels.slice(0,10);
 
     let barData = [{
       type: 'bar',

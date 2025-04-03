@@ -7,7 +7,7 @@ function buildMetadata(sample) {
 
     // Filter the metadata for the object with the desired sample number
   
-    metadata = metadata.find(number => number.id == sample);
+    metadata = metadata.filter(number => Number(number.id) === Number(sample))[0];
     // Use d3 to select the panel with id of `#sample-metadata`
     let sampleMetadata = d3.select("#sample-metadata") ;
 
@@ -31,11 +31,11 @@ function buildCharts(sample) {
 
     // Filter the samples for the object with the desired sample number
     
-    mySamples = mySamples.find(number => number.id == sample);
+    let filteredResult = mySamples.filter(number => Number(number.id) === Number(sample))[0];
     // Get the otu_ids, otu_labels, and sample_values
-    let otu_ids = mySamples.otu_ids ;
-    let otu_labels = mySamples.otu_labels ;
-    let sample_values = mySamples.sample_values ;
+    let otu_ids = filteredResult.otu_ids ;
+    let otu_labels = filteredResult.otu_labels ;
+    let sample_values = filteredResult.sample_values ;
 
     // Build a Bubble Chart
     let bubbleData = [{
@@ -76,27 +76,13 @@ function buildCharts(sample) {
     // Build a Bar Chart
     // Don't forget to slice and reverse the input data appropriately
 
-    let sortedValues = sample_values.sort((firstNum, secondNum) => secondNum - firstNum).slice(0,10).reverse();
-    
-    let sortedIds = [];
-
-    let sortedLabels = [];
-
-    for (let i = 0 ; i < sortedValues.length ; i++){
-      sortedIds.push(newIds[sample_values.indexOf(sortedValues[i])] )
-      sortedLabels.push(newIds[sample_values.indexOf(sortedValues[i])])
-    };
-
-
-
-    sortedIds = sortedIds.slice(0,10);
-    sortedLabels = sortedLabels.slice(0,10);
+    let sortedValues = sample_values.slice(0,10).reverse();    
 
     let barData = [{
       type: 'bar',
       x: sortedValues ,
-      y: sortedIds,
-      text : sortedLabels,
+      y: newIds.slice(0,10).reverse(),
+      text : otu_labels.slice(0,10).reverse(),
       orientation: 'h'
     }];
     
